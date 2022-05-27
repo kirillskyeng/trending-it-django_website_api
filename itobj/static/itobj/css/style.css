@@ -1717,6 +1717,7 @@ section {
   color: #aaaaaa;
   font-size: 14px;
   display: inline-block;
+  cursor: default; /* added */
 }
 
 .blog .entry .entry-content p {

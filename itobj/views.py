@@ -13,15 +13,35 @@ menu = [{'title': 'About', 'url_name': 'about'},
 
 def index(request):
     posts = ItObject.objects.all()
+    cats = Category.objects.all()
     context = {
         'title': 'Main Page',
         'menu': menu,
         'posts': posts,
+        'cats': cats,
+        'cat_selected': 0,
+        'menu_active_url': 'home',
     }
     return render(request, 'itobj/index.html', context=context)
 
+
+def show_category(request, cat_id):
+    posts = ItObject.objects.filter(cat=cat_id)
+    cats = Category.objects.all()
+    context = {
+        'title': Category.objects.get(pk=cat_id),
+        'menu': menu,
+        'posts': posts,
+        'cats': cats,
+        'cat_selected': cat_id,
+        'menu_active_url': 'home',
+    }
+    return render(request, 'itobj/index.html', context=context)
+
+
 def show_post(request):
     return HttpResponse('show_post Page')
+
 
 def about(request):
     return HttpResponse('About Page')
