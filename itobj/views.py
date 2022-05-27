@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import AddPostForm
 from .models import *
@@ -52,10 +53,11 @@ class ShowPost(DataMixin, DetailView):
         return context
 
 
-class AddPost(DataMixin, CreateView):
+class AddPost(LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm
     template_name = 'itobj/addpost.html'
     success_url = reverse_lazy('home')
+    login_url = '/admin/'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

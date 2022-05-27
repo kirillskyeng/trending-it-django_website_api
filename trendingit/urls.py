@@ -21,7 +21,7 @@ from itobj.views import pageNotFound
 from trendingit import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('', include('itobj.urls')),
 ]
 
