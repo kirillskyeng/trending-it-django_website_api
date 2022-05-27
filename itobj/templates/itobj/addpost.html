@@ -1,0 +1,45 @@
+{% extends 'itobj/base.html' %}
+
+{% block content %}
+
+<!-- ======= Contact Section ======= -->
+<section class="contact" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-duration="500">
+    <div class="container">
+        <div class="section-title">
+            <h2>{{title}}</h2>
+        </div>
+
+        <div class="section-title">
+            <form action="{% url 'add_post' %}" method="post" class="php-email-form2"  enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="validate">{{ form.non_field_errors }}</div>
+
+                <div class="form-group">
+                    {{ form.title }}
+                    <div class="">{{ form.title.errors }}</div>
+                </div>
+                <div class="form-group">
+                    {{ form.slug }}
+                    <div class="validate">{{ form.slug.errors }}</div>
+                </div>
+                <div class="form-group">
+                    {{ form.content }}
+                    <div class="validate">{{ form.content.errors }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="{{form.is_published.id_for_label }}">Publish: </label>{{ form.is_published }}
+                    <div class="validate">{{ form.is_published.errors }}</div>
+                </div>
+                <div class="form-group">
+                    {{ form.cat }}
+                    <div class="validate">{{ form.cat.errors }}</div>
+                </div>
+                <div class="text-center">
+                    <button type="submit">Save Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section><!-- End Contact Section -->
+
+{% endblock %}
