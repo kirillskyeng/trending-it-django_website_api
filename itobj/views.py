@@ -1,72 +1,72 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView
 
 from .forms import AddPostForm
 from .models import *
 
-menu = [{'title': 'About', 'url_name': 'about'},
-        {'title': 'Add Post', 'url_name': 'add_post'},
+menu = [{'title': 'Add Post', 'url_name': 'add_post'},
         {'title': 'Contact', 'url_name': 'contact'},
         {'title': 'Register', 'url_name': 'register'},
         {'title': 'Login', 'url_name': 'login'},
         ]
 
 
-def index(request):
-    posts = ItObject.objects.all()
-    context = {
-        'title': 'TrendingIT - trending, loved and interesting things in IT world.',
-        'menu': menu,
-        'posts': posts,
-        'cat_selected': 0,
-        'menu_active_url': 'home',
-    }
-    return render(request, 'itobj/index.html', context=context)
+class ItHome(ListView):
+    model = ItObject
+    template_name = 'itobj/index.html'
+    context_object_name = 'posts'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = menu
+        context['title'] = 'TrendingIT - trending, loved and interesting things in IT world.'
+        return context
+
+    def get_queryset(self):
+        return ItObject.objects.filter(is_published=True)
 
 
-def show_category(request, cat_slug):
-    posts = ItObject.objects.filter(cat_id__slug=cat_slug)
-    context = {
-        'title': Category.objects.get(slug=cat_slug),
-        'menu': menu,
-        'posts': posts,
-        'cat_selected': cat_slug,
-        'menu_active_url': 'home',
-    }
-    return render(request, 'itobj/index.html', context=context)
+class ItCategory(ListView):
+    model = Category
+    template_name = 'itobj/index.html'
+    context_object_name = 'posts'
+    allow_empty = False
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = menu
+        context['title'] = 'TrendingIT - ' + str(context['posts'][0].cat)
+        return context
+
+    def get_queryset(self):
+        return ItObject.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True)
 
 
-def show_post(request, post_slug):
-    post = get_object_or_404(ItObject, slug=post_slug)
-    cats = Category.objects.all()
+class ShowPost(DetailView):
+    model = ItObject
+    template_name = 'itobj/post.html'
+    context_object_name = 'post'
+    slug_url_kwarg = 'post_slug'
 
-    context = {
-        'title': post.title,
-        'menu': menu,
-        'post': post,
-        'cats': cats,
-        'cat_selected': post.cat_id,
-        'menu_active_url': post.cat,
-    }
-
-    return render(request, 'itobj/post.html', context=context)
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = menu
+        context['title'] = context['post']
+        return context
 
 
-def about(request):
-    return HttpResponse('About Page')
+class AddPost(CreateView):
+    form_class = AddPostForm
+    template_name = 'itobj/addpost.html'
+    success_url = reverse_lazy('home')
 
-
-def addpost(request):
-    if request.method == 'POST':
-        form = AddPostForm(request.POST)
-        print(form.is_valid())
-        if form.is_valid():
-            print(form.cleaned_data)
-            form.save()
-            return redirect('home')
-    else:
-        form = AddPostForm()
-    return render(request, 'itobj/addpost.html', {'form': form, 'menu': menu, 'title': 'Add post about IT'})
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = menu
+        context['title'] = 'Add new post'
+        return context
 
 
 def contact(request):
@@ -79,10 +79,6 @@ def login(request):
 
 def register(request):
     return HttpResponse('Register Page')
-
-
-def categories(request, cat_id):
-    return HttpResponse(f"<h1>Category</h1><p>{cat_id}</p>")
 
 
 def pageNotFound(request, exception):
