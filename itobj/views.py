@@ -23,20 +23,20 @@ def index(request):
     return render(request, 'itobj/index.html', context=context)
 
 
-def show_category(request, cat_id):
-    posts = ItObject.objects.filter(cat=cat_id)
+def show_category(request, cat_slug):
+    posts = ItObject.objects.filter(cat_id__slug=cat_slug)
     context = {
-        'title': Category.objects.get(pk=cat_id),
+        'title': Category.objects.get(slug=cat_slug),
         'menu': menu,
         'posts': posts,
-        'cat_selected': cat_id,
+        'cat_selected': cat_slug,
         'menu_active_url': 'home',
     }
     return render(request, 'itobj/index.html', context=context)
 
 
-def show_post(request, post_id):
-    post = get_object_or_404(ItObject, pk=post_id)
+def show_post(request, post_slug):
+    post = get_object_or_404(ItObject, slug=post_slug)
     cats = Category.objects.all()
 
     context = {
