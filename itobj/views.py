@@ -1,10 +1,11 @@
 from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
+from .forms import AddPostForm
 from .models import *
 
 menu = [{'title': 'About', 'url_name': 'about'},
-        {'title': 'Add Post', 'url_name': 'add_page'},
+        {'title': 'Add Post', 'url_name': 'add_post'},
         {'title': 'Contact', 'url_name': 'contact'},
         {'title': 'Register', 'url_name': 'register'},
         {'title': 'Login', 'url_name': 'login'},
@@ -55,8 +56,17 @@ def about(request):
     return HttpResponse('About Page')
 
 
-def addpage(request):
-    return HttpResponse('Add Page Page')
+def addpost(request):
+    if request.method == 'POST':
+        form = AddPostForm(request.POST)
+        print(form.is_valid())
+        if form.is_valid():
+            print(form.cleaned_data)
+            form.save()
+            return redirect('home')
+    else:
+        form = AddPostForm()
+    return render(request, 'itobj/addpost.html', {'form': form, 'menu': menu, 'title': 'Add post about IT'})
 
 
 def contact(request):

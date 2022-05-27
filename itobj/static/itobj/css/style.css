@@ -1539,22 +1539,28 @@ section {
   margin-bottom: 0;
 }
 
-.contact .php-email-form {
+.contact .php-email-form2 {
   box-shadow: 0 0 30px rgba(214, 215, 216, 0.6);
   padding: 30px;
   margin-bottom: 30px;
 }
 
-.contact .php-email-form .validate {
-  display: none;
+/*.contact .php-email-form2 .validate {*/
+/*  color: red;*/
+/*  margin: 0 0 15px 0;*/
+/*  font-weight: 400;*/
+/*  font-size: 13px;*/
+/*}*/
+
+.contact .php-email-form2 .validate ul {
+  list-style: none;
   color: red;
   margin: 0 0 15px 0;
   font-weight: 400;
   font-size: 13px;
 }
 
-.contact .php-email-form .error-message {
-  display: none;
+.contact .php-email-form2 .error-message {
   color: #fff;
   background: #ed3c0d;
   text-align: left;
@@ -1562,12 +1568,11 @@ section {
   font-weight: 600;
 }
 
-.contact .php-email-form .error-message br + br {
+.contact .php-email-form2 .error-message br + br {
   margin-top: 25px;
 }
 
-.contact .php-email-form .sent-message {
-  display: none;
+.contact .php-email-form2 .sent-message {
   color: #fff;
   background: #18d26e;
   text-align: center;
