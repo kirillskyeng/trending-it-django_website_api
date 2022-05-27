@@ -1,0 +1,37 @@
+{% extends 'itobj/base.html' %}
+{% load itobj_tags %}
+
+{% block content %}
+
+<!-- ======= Blog Section ======= -->
+<section class="blog" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-duration="500">
+  <div class="container">
+
+    <div class="row">
+
+      <div class="col-lg-8 entries">
+
+        <article class="entry entry-single">
+
+          {% show_title_stats post %}
+
+          <div class="entry-content">
+            {% autoescape off %}
+            {{post.content}}
+            {% endautoescape %}
+          </div>
+
+        </article><!-- End blog entry -->
+
+      </div><!-- End blog entries list -->
+
+      {% show_sidebar %}
+
+    </div><!-- End row -->
+
+  </div><!-- End container -->
+
+</section><!-- End Blog Section -->
+
+
+{% endblock %}
