@@ -6,9 +6,7 @@
 <!-- ======= Blog Section ======= -->
 <section class="blog" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-duration="500">
     <div class="container">
-
         <div class="row">
-
             <div class="col-lg-8 entries">
 
                 {% for p in posts %}
@@ -30,24 +28,37 @@
                 </article><!-- End blog entry -->
                 {% endfor %}
 
+                {% if page_obj.has_other_pages %}
                 <div class="blog-pagination">
                     <ul class="justify-content-center">
-                        <li class="disabled"><i class="icofont-rounded-left"></i></li>
-                        <li><a href="#">1</a></li>
-                        <li class="active"><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#"><i class="icofont-rounded-right"></i></a></li>
+                        {% if page_obj.has_previous %}
+                        <li><a href="?page={{ page_obj.previous_page_number }}"><i class="icofont-rounded-left"></i></a>
+                        </li>
+                        {% endif %}
+
+                        {% for p in paginator.page_range %}
+                        {% if page_obj.number == p %}
+                        <li class="active"><a href="#">{{ p }}</a></li>
+                        {% elif p >= page_obj.number|add:-1 and p <= page_obj.number|add:1 %}
+                        <li><a href="?page={{ p }}">{{ p }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                        <li><a href="?page={{ page_obj.next_page_number }}"><i class="icofont-rounded-right"></i></a>
+                        </li>
+                        {% endif %}
+
                     </ul>
                 </div>
+                {% endif %}
 
             </div><!-- End blog entries list -->
 
             {% show_sidebar %}
 
         </div><!-- End .row -->
-
     </div><!-- End .container -->
-
 </section><!-- End Blog Section -->
 
 
