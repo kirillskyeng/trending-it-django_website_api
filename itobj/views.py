@@ -5,30 +5,25 @@ from django.views.generic import ListView, DetailView, CreateView
 
 from .forms import AddPostForm
 from .models import *
-
-menu = [{'title': 'Add Post', 'url_name': 'add_post'},
-        {'title': 'Contact', 'url_name': 'contact'},
-        {'title': 'Register', 'url_name': 'register'},
-        {'title': 'Login', 'url_name': 'login'},
-        ]
+from .utils import *
 
 
-class ItHome(ListView):
+class ItHome(DataMixin, ListView):
     model = ItObject
     template_name = 'itobj/index.html'
     context_object_name = 'posts'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['menu'] = menu
-        context['title'] = 'TrendingIT - trending, loved and interesting things in IT world.'
+        c_def = self.get_user_context(title='TrendingIT - trending, loved and interesting things in IT world.')
+        context.update(c_def)
         return context
 
     def get_queryset(self):
         return ItObject.objects.filter(is_published=True)
 
 
-class ItCategory(ListView):
+class ItCategory(DataMixin, ListView):
     model = Category
     template_name = 'itobj/index.html'
     context_object_name = 'posts'
@@ -36,15 +31,15 @@ class ItCategory(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['menu'] = menu
-        context['title'] = 'TrendingIT - ' + str(context['posts'][0].cat)
+        c_def = self.get_user_context(title='TrendingIT - ' + str(context['posts'][0].cat))
+        context.update(c_def)
         return context
 
     def get_queryset(self):
         return ItObject.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True)
 
 
-class ShowPost(DetailView):
+class ShowPost(DataMixin, DetailView):
     model = ItObject
     template_name = 'itobj/post.html'
     context_object_name = 'post'
@@ -52,20 +47,20 @@ class ShowPost(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['menu'] = menu
-        context['title'] = context['post']
+        c_def = self.get_user_context(title=context['post'])
+        context.update(c_def)
         return context
 
 
-class AddPost(CreateView):
+class AddPost(DataMixin, CreateView):
     form_class = AddPostForm
     template_name = 'itobj/addpost.html'
     success_url = reverse_lazy('home')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['menu'] = menu
-        context['title'] = 'Add new post'
+        c_def = self.get_user_context(title='Add new post')
+        context.update(c_def)
         return context
 
 
