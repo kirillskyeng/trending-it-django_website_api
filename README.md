@@ -12,4 +12,8 @@
 - session-based authenticaiton
 - pagination
 
+### API usage
+- [api/v1/itlist/](https://trendingit.pythonanywhere.com/api/v1/itlist/): get posts or post a new one if authenticated
+- [api/v1/itlist/2/](https://trendingit.pythonanywhere.com/api/v1/itlist/2/): get specified post and update/delete if it is user's post
+
 ### Visit in [here](http://trendingit.pythonanywhere.com/)
