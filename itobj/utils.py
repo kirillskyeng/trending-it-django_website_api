@@ -1,7 +1,6 @@
 from itobj.models import Category
 
 menu = [{'title': 'Add Post', 'url_name': 'add_post'},
-        {'title': 'Contact', 'url_name': 'contact'},
         ]
 
 

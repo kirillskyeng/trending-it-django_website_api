@@ -23,7 +23,7 @@ class ItHome(DataMixin, ListView):
         return context
 
     def get_queryset(self):
-        return ItObject.objects.filter(is_published=True)
+        return ItObject.objects.filter(is_published=True).select_related('cat')
 
 
 class ItCategory(DataMixin, ListView):
@@ -34,12 +34,13 @@ class ItCategory(DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='TrendingIT - ' + str(context['posts'][0].cat))
+        c = Category.objects.get(slug=self.kwargs['cat_slug'])
+        c_def = self.get_user_context(title='TrendingIT - ' + str(c.name))
         context.update(c_def)
         return context
 
     def get_queryset(self):
-        return ItObject.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True)
+        return ItObject.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True).select_related('cat')
 
 
 class ShowPost(DataMixin, DetailView):
@@ -66,10 +67,6 @@ class AddPost(LoginRequiredMixin, DataMixin, CreateView):
         c_def = self.get_user_context(title='Add new post')
         context.update(c_def)
         return context
-
-
-def contact(request):
-    return HttpResponse('Contact')
 
 
 class RegisterUser(DataMixin, CreateView):
