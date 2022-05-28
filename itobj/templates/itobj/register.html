@@ -1,0 +1,33 @@
+{% extends 'itobj/base.html' %}
+
+{% block content %}
+
+<!-- ======= Contact Section ======= -->
+<section class="contact" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-duration="500">
+    <div class="container">
+        <div class="section-title">
+            <h2>{{title}}</h2>
+        </div>
+
+        <div class="section-title">
+            <form method="post" class="php-email-form2">
+                {% csrf_token %}
+                <div class="validate">{{ form.non_field_errors }}</div>
+
+                {% for f in form %}
+                <div class="form-group">
+                    {{ f }}
+                    <div class="validate">{{ f.errors }}</div>
+                </div>
+                {% endfor %}
+
+                <div class="text-center">
+                    <button type="submit">Register</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</section><!-- End Contact Section -->
+
+{% endblock %}
