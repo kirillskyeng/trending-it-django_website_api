@@ -5,9 +5,15 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from rest_framework import generics, viewsets
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework.response import Response
 
 from .forms import *
 from .models import *
+from .permissions import *
+from .serializers import ItObjectSerializer
 from .utils import *
 
 
@@ -108,3 +114,29 @@ def logout_user(request):
 
 def pageNotFound(request, exception):
     return HttpResponseNotFound("<h1>Sorry, the page is not found.</h1><p>Create page for this url.</p>")
+
+
+# API VIEWS
+class ItObjectAPIListPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
+
+class ItObjectAPIList(generics.ListCreateAPIView):
+    queryset = ItObject.objects.all()
+    serializer_class = ItObjectSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    pagination_class = ItObjectAPIListPagination
+
+
+class ItObjectAPIUpdate(generics.RetrieveUpdateAPIView):
+    queryset = ItObject.objects.all()
+    serializer_class = ItObjectSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
+
+
+class ItObjectAPIDestroy(generics.RetrieveDestroyAPIView):
+    queryset = ItObject.objects.all()
+    serializer_class = ItObjectSerializer
+    permission_classes = (IsOwnerOrReadOnly, IsAdminUser)

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 
@@ -14,6 +15,7 @@ class ItObject(models.Model):
     likes = models.IntegerField(default=0)
     trending = models.IntegerField(default=0)
     cat = models.ForeignKey('Category', on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title

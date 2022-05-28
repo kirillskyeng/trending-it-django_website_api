@@ -16,13 +16,22 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import routers
 
-from itobj.views import pageNotFound
+from itobj.views import *
 from trendingit import settings
+
+# router = routers.DefaultRouter()
+# router.register(r'itlist', ItObjectViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('itobj.urls')),
+    path('api/v1/auth/', include('rest_framework.urls')),
+    # path('api/v1/', include(router.urls)),  # http://127.0.0.1:8000/api/v1/itlist/
+    path('api/v1/itlist/', ItObjectAPIList.as_view()),
+    path('api/v1/itlist/<int:pk>/', ItObjectAPIUpdate.as_view()),
+    path('api/v1/itdelete/<int:pk>/', ItObjectAPIDestroy.as_view()),
 ]
 
 if settings.DEBUG:
