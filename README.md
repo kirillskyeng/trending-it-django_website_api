@@ -17,3 +17,9 @@
 - [api/v1/itlist/2/](https://trendingit.pythonanywhere.com/api/v1/itlist/2/): get specified post and update/delete if it is user's post
 
 ### Visit in [here](http://trendingit.pythonanywhere.com/)
+
+### Run with Docker
+- assuming you have docker installed
+- use `docker push kirill0720/trendingit:volumes` to load image
+- use `run -d -p 80:8000 -v vol:/app/db.sqlite3 --rm --name trendingit kirill0720/trendingit:volumes` to run container
+- go to *localhost* in your browser and enjoy :slightly_smiling_face:
