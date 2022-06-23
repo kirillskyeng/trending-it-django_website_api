@@ -9,6 +9,7 @@ from rest_framework import generics, viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
+from django.db.models import F
 
 from .forms import *
 from .models import *
@@ -54,6 +55,11 @@ class ShowPost(DataMixin, DetailView):
     template_name = 'itobj/post.html'
     context_object_name = 'post'
     slug_url_kwarg = 'post_slug'
+
+    def get_object(self, queryset=None):
+        item = super().get_object(queryset)
+        item.increase_views()
+        return item
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
