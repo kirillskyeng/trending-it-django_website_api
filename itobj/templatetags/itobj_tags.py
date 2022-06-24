@@ -11,5 +11,5 @@ def show_sidebar():
 
 
 @register.inclusion_tag('itobj/show_title_stats.html')
-def show_title_stats(post=None):
-    return {'p': post}
+def show_title_stats(post=None, liked=False):
+    return {'p': post, 'liked': liked}

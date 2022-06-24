@@ -4,16 +4,18 @@
 
 <div class="entry-meta">
     <ul>
-        <li class="d-flex align-items-center"><i class="icofont-list"></i> <a href="">{{p.cat}}</a></li>
-        <li class="d-flex align-items-center"><i class="icofont-user"></i> <a href="">Kirill Netreba</a></li>
-        <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i> <a href="">
-            <time datetime="{{p.time_update}}">{{p.time_update|date:"M d, Y"}}</time>
-        </a></li>
-        <li class="d-flex align-items-center"><i class="icofont-heart"></i> <a href="">{{p.likes}}
-            </a></li>
-        <li class="d-flex align-items-center"><i class="icofont-money-bag"></i> <a href="">{{p.trending}}
-            </a></li>
-        <li class="d-flex align-items-center"><i class="icofont-eye"></i> <a href="">{{p.views}}
-            </a></li>
+        <li class="d-flex align-items-center"><i class="icofont-list"></i> <a>{{p.cat}}</a></li>
+        <li class="d-flex align-items-center"><i class="icofont-user"></i> <a>Kirill Netreba</a></li>
+        <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i> <a>
+            <time datetime="{{p.time_update}}">{{p.time_update|date:"M d, Y"}}</time></a></li>
+        <li class="d-flex align-items-center"><a href="{% url 'like_post' p.slug %}">
+        {% if liked %}
+            <i class="icofont-heart" style="color:red"></i>
+        {% else %}
+            <i class="icofont-heart"></i>
+        {% endif %}
+        </a> <a>{{ p.total_likes }}</a></li>
+        <li class="d-flex align-items-center"><i class="icofont-money-bag"></i> <a>{{p.trending}}</a></li>
+        <li class="d-flex align-items-center"><i class="icofont-eye"></i> <a>{{p.views}}</a></li>
     </ul>
 </div>

@@ -12,7 +12,7 @@ class ItObject(models.Model):
     time_update = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(default=True)
     views = models.IntegerField(default=0)
-    likes = models.IntegerField(default=0)
+    likes = models.ManyToManyField(User, related_name='blog_post')
     trending = models.IntegerField(default=0)
     cat = models.ForeignKey('Category', on_delete=models.PROTECT)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -26,6 +26,9 @@ class ItObject(models.Model):
     def increase_views(self):
         self.views += 1
         self.save()
+
+    def total_likes(self):
+        return self.likes.count()
 
     class Meta:
         verbose_name = 'IT Object'

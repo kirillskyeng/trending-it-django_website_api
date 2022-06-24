@@ -1,8 +1,8 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import generics, viewsets
@@ -63,9 +63,22 @@ class ShowPost(DataMixin, DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title=context['post'])
+        # liked used to set heart-icon to red or grey color
+        liked = False
+        if self.object.likes.filter(id=self.request.user.id).exists():
+            liked = True
+        c_def = self.get_user_context(title=context['post'], liked=liked)
         context.update(c_def)
         return context
+
+
+def like_view(request, post_slug):
+    post = get_object_or_404(ItObject, slug=post_slug)
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+    else:
+        post.likes.add(request.user)
+    return HttpResponseRedirect(reverse('post', args=[post_slug]))
 
 
 class AddPost(LoginRequiredMixin, DataMixin, CreateView):

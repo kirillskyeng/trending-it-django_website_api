@@ -9,4 +9,5 @@ urlpatterns = [
     path('register/', RegisterUser.as_view(), name='register'),
     path('categories/<slug:cat_slug>/', ItCategory.as_view(), name='show_category'),
     path('post/<slug:post_slug>/', ShowPost.as_view(), name='post'),
+    path('like/<slug:post_slug>/', like_view, name='like_post'),
 ]
