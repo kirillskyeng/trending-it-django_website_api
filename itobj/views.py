@@ -9,7 +9,7 @@ from rest_framework import generics, viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
-from django.db.models import F
+from hitcount.views import HitCountDetailView
 
 from .forms import *
 from .models import *
@@ -50,16 +50,17 @@ class ItCategory(DataMixin, ListView):
         return ItObject.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True).select_related('cat')
 
 
-class ShowPost(DataMixin, DetailView):
+class ShowPost(DataMixin, HitCountDetailView):
     model = ItObject
     template_name = 'itobj/post.html'
     context_object_name = 'post'
     slug_url_kwarg = 'post_slug'
+    count_hit = True
 
-    def get_object(self, queryset=None):
-        item = super().get_object(queryset)
-        item.increase_views()
-        return item
+    # def get_object(self, queryset=None):
+    #     item = super().get_object(queryset)
+    #     item.increase_views()
+    #     return item
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

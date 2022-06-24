@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'itobj.apps.ItobjConfig',
     'rest_framework',
+    'hitcount'
 ]
 
 MIDDLEWARE = [
